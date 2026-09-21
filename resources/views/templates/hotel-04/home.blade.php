@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('hotel-04', 'hero', 'modern boutique hotel exterior at dusk, stylish architecture, warm lights', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('hotel-04', 'hero', 'modern boutique hotel exterior at dusk, stylish architecture, warm lights', 'landscape_16_9')
             }}" alt="Hotel {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-40">
@@ -45,7 +45,7 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
             <img src="{{
-                $profile->about_image_url ?: static_image('hotel-04', 'full', 'artistic hotel room decor with unique furniture', 'square')
+                $profile?->about_image_url ?: static_image('hotel-04', 'full', 'artistic hotel room decor with unique furniture', 'square')
             }}" alt="Kamar" class="rounded-2xl h-48 w-full object-cover shadow-lg">
             <img src="{{
                 static_image('hotel-04', 'full', 'hotel lounge cozy artistic interior', 'square')

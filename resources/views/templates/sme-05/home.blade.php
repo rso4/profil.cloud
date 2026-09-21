@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('sme-05', 'hero', 'cozy coffee shop with barista making latte art, warm atmosphere', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('sme-05', 'hero', 'cozy coffee shop with barista making latte art, warm atmosphere', 'landscape_16_9')
             }}" alt="Kafe {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-amber-950/60"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-48 text-center">

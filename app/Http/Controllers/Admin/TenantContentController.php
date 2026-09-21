@@ -52,28 +52,54 @@ class TenantContentController extends Controller
         $tenant->save();
         unset($data['name']);
 
-        // Upload gambar hero/beranda (ganti = hapus file lama milik tenant)
-        $coverPath = null;
-        $aboutPath = null;
+        // Objek UploadedFile tidak boleh ikut ke updateOrCreate() — hanya kolom
+        // teks profil yang di-mass-assign. Path gambar ditangani terpisah agar
+        // tidak ada path /tmp yang sempat tersimpan ke database.
+        unset($data['cover_image'], $data['about_image']);
 
-        if ($request->hasFile('cover_image')) {
-            $this->deleteProfileImage($tenant->profile?->cover_image);
-            $coverPath = 'storage/'.$request->file('cover_image')->store('profiles/'.$tenant->id, 'public');
+        $hasCoverUpload = $request->hasFile('cover_image')
+            && $request->file('cover_image')->isValid();
+        $hasAboutUpload = $request->hasFile('about_image')
+            && $request->file('about_image')->isValid();
+
+        // Upload file BARU terlebih dahulu; file lama hanya dihapus SETELAH
+        // upload baru sukses (mencegah kehilangan gambar saat upload gagal).
+        $newCoverPath = $hasCoverUpload
+            ? 'storage/'.$request->file('cover_image')->store('profiles/'.$tenant->id, 'public')
+            : null;
+        $newAboutPath = $hasAboutUpload
+            ? 'storage/'.$request->file('about_image')->store('profiles/'.$tenant->id, 'public')
+            : null;
+
+        try {
+            $tenant->profile()->updateOrCreate(['tenant_id' => $tenant->id], $data);
+        } catch (\Throwable $e) {
+            // Rollback: buang file yang baru diupload karena penyimpanan DB gagal.
+            $this->deleteProfileImage($newCoverPath);
+            $this->deleteProfileImage($newAboutPath);
+
+            throw $e;
         }
 
-        // Upload gambar section "Tentang"
-        if ($request->hasFile('about_image')) {
-            $this->deleteProfileImage($tenant->profile?->about_image);
-            $aboutPath = 'storage/'.$request->file('about_image')->store('profiles/'.$tenant->id, 'public');
+        // Hapus file lama milik tenant SETELAH record profil terupdate.
+        if ($newCoverPath !== null) {
+            $this->deleteProfileImage($tenant->profile()->value('cover_image'));
+        }
+        if ($newAboutPath !== null) {
+            $this->deleteProfileImage($tenant->profile()->value('about_image'));
         }
 
-        $tenant->profile()->updateOrCreate(['tenant_id' => $tenant->id], $data);
+        // Simpan path gambar baru setelah record profil dipastikan ada.
+        if ($newCoverPath !== null || $newAboutPath !== null) {
+            $profile = $tenant->profile()->firstOrFail();
 
-        // Simpan path gambar setelah record profil dipastikan ada
-        if ($coverPath !== null || $aboutPath !== null) {
-            $profile = $tenant->profile()->first();
-            $profile->cover_image = $coverPath ?? $profile->cover_image;
-            $profile->about_image = $aboutPath ?? $profile->about_image;
+            if ($newCoverPath !== null) {
+                $profile->cover_image = $newCoverPath;
+            }
+            if ($newAboutPath !== null) {
+                $profile->about_image = $newAboutPath;
+            }
+
             $profile->save();
         }
 
@@ -141,7 +167,7 @@ class TenantContentController extends Controller
         return back()->with('success', 'Layanan berhasil ditambahkan.');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $this->authorizeTenant($request);
         $tenant = current_tenant();
@@ -161,7 +187,7 @@ class TenantContentController extends Controller
         return back()->with('success', 'Layanan berhasil diperbarui.');
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, string $id)
     {
         $this->authorizeTenant($request);
         $tenant = current_tenant();
@@ -236,7 +262,7 @@ class TenantContentController extends Controller
         return $created ? $targetPath : $sourcePath;
     }
 
-    public function updateGallery(Request $request, $id)
+    public function updateGallery(Request $request, string $id)
     {
         $this->authorizeTenant($request);
         $tenant = current_tenant();
@@ -281,7 +307,7 @@ class TenantContentController extends Controller
         return back()->with('success', 'Gambar berhasil diperbarui.');
     }
 
-    public function destroyGallery(Request $request, $id)
+    public function destroyGallery(Request $request, string $id)
     {
         $this->authorizeTenant($request);
         $tenant = current_tenant();
@@ -328,7 +354,7 @@ class TenantContentController extends Controller
         return back()->with('success', 'Kontak berhasil ditambahkan.');
     }
 
-    public function editContact(Request $request, $id)
+    public function editContact(Request $request, string $id)
     {
         $this->authorizeTenant($request);
         $tenant = current_tenant();
@@ -339,7 +365,7 @@ class TenantContentController extends Controller
         return view('admin.contact-edit', compact('tenant', 'contact'));
     }
 
-    public function updateContact(Request $request, $id)
+    public function updateContact(Request $request, string $id)
     {
         $this->authorizeTenant($request);
         $tenant = current_tenant();
@@ -358,7 +384,7 @@ class TenantContentController extends Controller
         return back()->with('success', 'Kontak berhasil diperbarui.');
     }
 
-    public function destroyContact(Request $request, $id)
+    public function destroyContact(Request $request, string $id)
     {
         $this->authorizeTenant($request);
         $tenant = current_tenant();

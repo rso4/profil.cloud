@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('sme-09', 'hero', 'elegant wedding ceremony setup with flowers and decor, romantic atmosphere', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('sme-09', 'hero', 'elegant wedding ceremony setup with flowers and decor, romantic atmosphere', 'landscape_16_9')
             }}" alt="Event {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-rose-950/50"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-48 text-center">
@@ -35,7 +35,7 @@
 <section id="tentang" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
         <img src="{{
-                $profile->about_image_url ?: static_image('sme-09', 'full', 'event planner decorating wedding venue arrangement', 'square')
+                $profile?->about_image_url ?: static_image('sme-09', 'full', 'event planner decorating wedding venue arrangement', 'square')
             }}" alt="Dekorasi" class="rounded-2xl h-96 w-full object-cover shadow-xl">
         <div>
             <p class="text-rose-600 font-semibold tracking-wide mb-2">Tentang Kami</p>

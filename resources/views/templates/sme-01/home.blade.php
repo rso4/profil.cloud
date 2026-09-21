@@ -18,7 +18,7 @@
 
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
-    <img src="{{ $profile->cover_image_url ?: static_image('sme-01', 'hero', 'creative small business homepage with vibrant gradient hero and product showcase', 'landscape_16_9') }}" alt="{{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
+    <img src="{{ $profile?->cover_image_url ?: static_image('sme-01', 'hero', 'creative small business homepage with vibrant gradient hero and product showcase', 'landscape_16_9') }}" alt="{{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-gradient-to-br from-primary/80 to-secondary/70"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-44 text-center">
         <h1 class="text-4xl md:text-6xl font-extrabold mb-4">{{ $tenant->name }}</h1>
@@ -30,7 +30,7 @@
 {{-- Tentang --}}
 <section id="tentang" class="py-20">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-        <img src="{{ $profile->about_image_url ?: static_image('sme-01', 'full', 'creative workshop small business products display', 'square') }}" alt="Suasana {{ $tenant->name }}" class="rounded-2xl h-96 w-full object-cover shadow-xl">
+        <img src="{{ $profile?->about_image_url ?: static_image('sme-01', 'full', 'creative workshop small business products display', 'square') }}" alt="Suasana {{ $tenant->name }}" class="rounded-2xl h-96 w-full object-cover shadow-xl">
         <div>
             <h2 class="text-3xl font-bold mb-6">Tentang Kami</h2>
             <p class="text-lg text-gray-600 leading-relaxed">{{ $profile->description ?? 'Deskripsi bisnis belum diisi.' }}</p>

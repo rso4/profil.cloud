@@ -38,7 +38,7 @@
             </div>
         </div>
         <img src="{{
-                $profile->about_image_url ?: static_image('hotel-06', 'full', 'cozy budget hotel room clean simple', 'square')
+                $profile?->about_image_url ?: static_image('hotel-06', 'full', 'cozy budget hotel room clean simple', 'square')
             }}" alt="Kamar" class="rounded-2xl h-80 w-full object-cover shadow-lg">
     </div>
 </section>

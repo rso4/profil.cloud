@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('hotel-07', 'hero', 'heritage hotel colonial architecture, classic facade, timeless elegance', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('hotel-07', 'hero', 'heritage hotel colonial architecture, classic facade, timeless elegance', 'landscape_16_9')
             }}" alt="Hotel {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-gradient-to-t from-amber-900/80 to-black/40"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-48 text-center">
@@ -41,7 +41,7 @@
             <p class="text-gray-500 leading-relaxed">Dibangun sejak zaman kolonial, hotel kami memadukan arsitektur klasik dengan fasilitas kontemporer.</p>
         </div>
         <img src="{{
-                $profile->about_image_url ?: static_image('hotel-07', 'full', 'hotel grand staircase heritage interior classic', 'square')
+                $profile?->about_image_url ?: static_image('hotel-07', 'full', 'hotel grand staircase heritage interior classic', 'square')
             }}" alt="Interior" class="rounded-2xl h-96 w-full object-cover shadow-xl">
     </div>
 </section>

@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('school-04', 'hero', 'achievement school students celebrating with trophies, graduation cap, confetti', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('school-04', 'hero', 'achievement school students celebrating with trophies, graduation cap, confetti', 'landscape_16_9')
             }}" alt="Sekolah {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-amber-900/60"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-44 text-center">

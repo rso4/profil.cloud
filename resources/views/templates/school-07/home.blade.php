@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('school-07', 'hero', 'vocational school students in workshop practicing engineering skills', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('school-07', 'hero', 'vocational school students in workshop practicing engineering skills', 'landscape_16_9')
             }}" alt="Sekolah {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-slate-900/60"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-48 text-center">
@@ -35,7 +35,7 @@
 <section id="tentang" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
         <img src="{{
-                $profile->about_image_url ?: static_image('school-07', 'full', 'vocational training workshop with modern equipment', 'square')
+                $profile?->about_image_url ?: static_image('school-07', 'full', 'vocational training workshop with modern equipment', 'square')
             }}" alt="Bengkel" class="rounded-2xl h-80 w-full object-cover shadow-lg">
         <div>
             <p class="text-orange-600 font-semibold tracking-wide mb-2">Tentang Kami</p>

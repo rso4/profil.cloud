@@ -22,7 +22,7 @@ class TenantContentTest extends TestCase
     {
         parent::setUp();
 
-        $template = Template::factory()->create(['slug' => 'hotel-01']);
+        Template::factory()->create(['slug' => 'hotel-01']);
         $this->tenant = Tenant::factory()->create(['slug' => 'hotel', 'template_slug' => 'hotel-01']);
         $this->admin = User::factory()->tenantAdmin($this->tenant->id)->create();
     }
@@ -182,10 +182,65 @@ class TenantContentTest extends TestCase
         $this->assertStringStartsWith('storage/profiles/'.$this->tenant->id.'/', $profile->about_image);
 
         // File fisik tersimpan dan URL accessor berfungsi
-        Storage::disk('public')->assertExists(substr($profile->cover_image, strlen('storage/')));
-        Storage::disk('public')->assertExists(substr($profile->about_image, strlen('storage/')));
+        $this->assertTrue(Storage::disk('public')->exists(substr($profile->cover_image, strlen('storage/'))));
+        $this->assertTrue(Storage::disk('public')->exists(substr($profile->about_image, strlen('storage/'))));
         $this->assertSame(asset($profile->cover_image), $profile->cover_image_url);
         $this->assertSame(asset($profile->about_image), $profile->about_image_url);
+    }
+
+    /**
+     * Regresi: objek UploadedFile tidak boleh ikut mass-assignment ke
+     * tenant_profiles (path /tmp/fileph... tidak boleh pernah tersimpan).
+     */
+    public function test_profile_upload_never_stores_tmp_path(): void
+    {
+        Storage::fake('public');
+
+        // Tenant BELUM punya record profile -> jalur create()
+        $response = $this->tenantRequest('post', '/admin/profile', [
+            'name' => 'Hotel Pertama Kali',
+            'cover_image' => UploadedFile::fake()->image('hero.jpg', 1280, 720),
+        ]);
+
+        $response->assertRedirect();
+
+        $profile = $this->tenant->profile()->first();
+        $this->assertNotNull($profile);
+        $this->assertStringStartsWith('storage/profiles/', (string) $profile->cover_image);
+        $this->assertStringNotContainsString('/tmp/', (string) $profile->cover_image);
+    }
+
+    /**
+     * Regresi: mengganti gambar harus menghapus file lama SETELAH upload baru
+     * sukses — file lama tidak boleh hilang duluan, file baru harus ada.
+     */
+    public function test_profile_upload_replaces_old_image_files(): void
+    {
+        Storage::fake('public');
+
+        $this->tenant->profile()->create([
+            'cover_image' => 'storage/profiles/'.$this->tenant->id.'/lama.jpg',
+            'about_image' => 'storage/profiles/'.$this->tenant->id.'/lama-about.jpg',
+        ]);
+        Storage::disk('public')->put('profiles/'.$this->tenant->id.'/lama.jpg', 'lama');
+        Storage::disk('public')->put('profiles/'.$this->tenant->id.'/lama-about.jpg', 'lama');
+
+        $response = $this->tenantRequest('post', '/admin/profile', [
+            'name' => 'Hotel Ganti Gambar',
+            'cover_image' => UploadedFile::fake()->image('baru.jpg', 1280, 720),
+        ]);
+
+        $response->assertRedirect();
+
+        $profile = $this->tenant->profile()->first();
+        $this->assertStringStartsWith('storage/profiles/'.$this->tenant->id.'/', $profile->cover_image);
+        $this->assertNotSame('storage/profiles/'.$this->tenant->id.'/lama.jpg', $profile->cover_image);
+
+        // Gambar lama terhapus, gambar baru ada, about tetap utuh
+        $this->assertFalse(Storage::disk('public')->exists('profiles/'.$this->tenant->id.'/lama.jpg'));
+        $this->assertTrue(Storage::disk('public')->exists(substr($profile->cover_image, strlen('storage/'))));
+        $this->assertTrue(Storage::disk('public')->exists('profiles/'.$this->tenant->id.'/lama-about.jpg'));
+        $this->assertSame('storage/profiles/'.$this->tenant->id.'/lama-about.jpg', $profile->about_image);
     }
 
     public function test_public_homepage_renders_custom_profile_images(): void
@@ -357,8 +412,8 @@ class TenantContentTest extends TestCase
         $this->assertStringContainsString('-thumb', $gallery->thumb);
 
         // File lama terhapus, file baru ada
-        Storage::disk('public')->assertMissing('galleries/'.$this->tenant->id.'/lama.jpg');
-        Storage::disk('public')->assertExists(substr($gallery->image, strlen('storage/')));
+        $this->assertFalse(Storage::disk('public')->exists('galleries/'.$this->tenant->id.'/lama.jpg'));
+        $this->assertTrue(Storage::disk('public')->exists(substr($gallery->image, strlen('storage/'))));
     }
 
     public function test_tenant_cannot_update_other_tenant_gallery(): void

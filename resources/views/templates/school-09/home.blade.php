@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('school-09', 'hero', 'students in tutoring class learning with teacher, bright modern classroom', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('school-09', 'hero', 'students in tutoring class learning with teacher, bright modern classroom', 'landscape_16_9')
             }}" alt="Bimbel {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-purple-800/60"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-44 text-center">
@@ -54,7 +54,7 @@
             </div>
         </div>
         <img src="{{
-                $profile->about_image_url ?: static_image('school-09', 'full', 'tutor helping student with homework 1on1', 'square')
+                $profile?->about_image_url ?: static_image('school-09', 'full', 'tutor helping student with homework 1on1', 'square')
             }}" alt="Belajar" class="rounded-2xl h-80 w-full object-cover shadow-lg">
     </div>
 </section>

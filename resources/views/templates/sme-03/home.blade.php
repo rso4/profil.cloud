@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('sme-03', 'hero', 'delicious indonesian culinary dish on restaurant table, appetizing food photography', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('sme-03', 'hero', 'delicious indonesian culinary dish on restaurant table, appetizing food photography', 'landscape_16_9')
             }}" alt="Kuliner {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-red-900/60"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-44 text-center">

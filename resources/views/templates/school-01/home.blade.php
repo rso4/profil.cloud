@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('school-01', 'hero', 'modern school building with students in uniform smiling, bright campus', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('school-01', 'hero', 'modern school building with students in uniform smiling, bright campus', 'landscape_16_9')
             }}" alt="Sekolah {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-blue-900/60"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-44 text-center">
@@ -50,7 +50,7 @@
             </div>
         </div>
         <img src="{{
-                $profile->about_image_url ?: static_image('school-01', 'full', 'happy students in classroom learning together', 'square')
+                $profile?->about_image_url ?: static_image('school-01', 'full', 'happy students in classroom learning together', 'square')
             }}" alt="Kegiatan Belajar" class="rounded-2xl h-80 w-full object-cover shadow-lg">
     </div>
 </section>

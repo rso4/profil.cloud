@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('sme-04', 'hero', 'fashion boutique with elegant clothing display, stylish store interior', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('sme-04', 'hero', 'fashion boutique with elegant clothing display, stylish store interior', 'landscape_16_9')
             }}" alt="Boutique {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-black/50"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-48 text-center">
@@ -54,7 +54,7 @@
             </div>
         </div>
         <img src="{{
-                $profile->about_image_url ?: static_image('sme-04', 'full', 'fashion designer workshop with fabric and sketches', 'square')
+                $profile?->about_image_url ?: static_image('sme-04', 'full', 'fashion designer workshop with fabric and sketches', 'square')
             }}" alt="Atelier" class="rounded-2xl h-96 w-full object-cover shadow-xl">
     </div>
 </section>

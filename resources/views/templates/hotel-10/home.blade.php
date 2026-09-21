@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('hotel-10', 'hero', 'premium resort villa with infinity pool overlooking ocean at dusk', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('hotel-10', 'hero', 'premium resort villa with infinity pool overlooking ocean at dusk', 'landscape_16_9')
             }}" alt="Resort {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-52 text-center">
@@ -38,7 +38,7 @@
 <section id="tentang" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
         <img src="{{
-                $profile->about_image_url ?: static_image('hotel-10', 'full', 'villa interior contemporary luxury ocean view', 'square')
+                $profile?->about_image_url ?: static_image('hotel-10', 'full', 'villa interior contemporary luxury ocean view', 'square')
             }}" alt="Villa" class="rounded-3xl h-96 w-full object-cover shadow-2xl">
         <div>
             <p class="text-primary font-semibold tracking-wide mb-2">Tentang Kami</p>

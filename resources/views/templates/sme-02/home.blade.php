@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('sme-02', 'hero', 'modern small business office team working together, bright professional workspace', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('sme-02', 'hero', 'modern small business office team working together, bright professional workspace', 'landscape_16_9')
             }}" alt="{{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-gray-900/60"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-44 text-center">
@@ -38,7 +38,7 @@
 <section id="tentang" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
         <img src="{{
-                $profile->about_image_url ?: static_image('sme-02', 'full', 'professional business team meeting in modern office', 'square')
+                $profile?->about_image_url ?: static_image('sme-02', 'full', 'professional business team meeting in modern office', 'square')
             }}" alt="Tentang" class="rounded-2xl h-96 w-full object-cover shadow-xl">
         <div>
             <p class="text-primary font-semibold tracking-wide mb-2">Tentang Kami</p>

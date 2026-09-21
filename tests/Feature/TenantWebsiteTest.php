@@ -72,4 +72,33 @@ class TenantWebsiteTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Profil Cloud');
     }
+
+    /**
+     * Regresi: tenant tanpa record profil sama sekali tidak boleh menyebabkan
+     * error "Attempt to read property on null" di template. Controller harus
+     * mengirim fallback TenantProfile kosong, dan template memakai akses
+     * null-safe ($profile?->).
+     */
+    public function test_tenant_without_profile_renders_homepage_with_fallback_images(): void
+    {
+        // Tenant baru TANPA profile
+        $bare = Tenant::factory()->create(['slug' => 'kosong', 'template_slug' => 'hotel-01']);
+
+        $response = $this->get('http://kosong.profil.cloud/');
+
+        $response->assertOk();
+        $response->assertSee($bare->name);
+
+        // Hero memakai fallback static_image(): file statis jika ada, atau URL dinamis
+        $staticPath = 'storage/images/templates/hotel-01/hero.jpg';
+
+        if (file_exists(public_path($staticPath))) {
+            $response->assertSee(asset($staticPath), false);
+        } else {
+            $response->assertSee('image_size=landscape_16_9', false);
+        }
+
+        // Tidak ada path profil kustom yang bocor ke halaman
+        $response->assertDontSee('storage/profiles/', false);
+    }
 }

@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('sme-07', 'hero', 'professional service business consultant handshake meeting modern office', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('sme-07', 'hero', 'professional service business consultant handshake meeting modern office', 'landscape_16_9')
             }}" alt="Jasa {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-slate-900/60"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-44 text-center">
@@ -54,7 +54,7 @@
             </div>
         </div>
         <img src="{{
-                $profile->about_image_url ?: static_image('sme-07', 'full', 'professional consultant presenting to client in office', 'square')
+                $profile?->about_image_url ?: static_image('sme-07', 'full', 'professional consultant presenting to client in office', 'square')
             }}" alt="Konsultasi" class="rounded-2xl h-96 w-full object-cover shadow-xl">
     </div>
 </section>

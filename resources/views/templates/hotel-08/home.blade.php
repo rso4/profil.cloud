@@ -20,7 +20,7 @@
 {{-- Hero --}}
 <section id="beranda" class="relative text-white">
     <img src="{{
-                $profile->cover_image_url ?: static_image('hotel-08', 'hero', 'luxury spa and wellness hotel, tranquil atmosphere, soft candles and stones', 'landscape_16_9')
+                $profile?->cover_image_url ?: static_image('hotel-08', 'hero', 'luxury spa and wellness hotel, tranquil atmosphere, soft candles and stones', 'landscape_16_9')
             }}" alt="Spa {{ $tenant->name }}" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-primary/40"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-48 text-center">
